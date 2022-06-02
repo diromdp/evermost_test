@@ -15,4 +15,7 @@ module.exports = withBundleAnalyzer({
     webpack5: true,
   },
   reactStrictMode: true,
+  images: {
+    domains: ['https:/placeimg.com/640/480/animals/grayscale'],
+  },
 });

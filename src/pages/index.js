@@ -1,19 +1,96 @@
+import React, { useEffect, useState } from 'react';
 import Head from 'next/head';
-import { Input, InputGroup, Stack, Skeleton, SearchIcon } from '@chakra-ui/react'
+import { Input, InputGroup, Skeleton  } from '@chakra-ui/react'
 import Link from 'next/link';
 import Slider from "react-slick";
+import axios from 'axios';
 
 import Header from '../component/header';
+import Navbar from '../component/navbar';
+
+import { formatRupiah } from '../lib/helper';
+
 import styles from '../styles/Home.module.css';
 
 export default function Home() {
+   const [state, setState] = useState({
+      isLoading: false,
+      dataMenu: false,
+   });
+   const [stateBanner, setStateBanner] = useState({
+      dataBanner: false,
+      isLoading: false
+   })
+   const [stateProduct, setStateProduct] = useState({
+      dataProduct: false,
+      isLoading: false
+   })
+
    const settings = {
       dots: true,
       infinite: true,
       speed: 500,
       slidesToShow: 1,
+      arrows: false,
       slidesToScroll: 1
    };
+
+   const _handlerGetDataBanner = () => {
+      try {
+         axios
+            .get(`https://62982b718d77ad6f750d8168.mockapi.io/banner`)
+            .then((response) => {
+               setStateBanner({
+                  dataBanner: response.data,
+                  isLoading: true
+
+               })
+            })
+            .catch((error) => console.log(error));
+      } catch (error) {
+         console.log(error);
+      }
+   }
+
+   const _handlerGetDataMenu = () => {
+      try {
+         axios
+            .get(`https://62982b718d77ad6f750d8168.mockapi.io/menu`)
+            .then((response) => {
+               setState({
+                  dataMenu: response.data,
+                  isLoading: true
+               })
+            })
+            .catch((error) => console.log(error));
+      } catch (error) {
+         console.log(error);
+      }
+   }
+
+   const _handlerGetProduct = () => {
+      try {
+         axios
+            .get(`https://62982b718d77ad6f750d8168.mockapi.io/product`)
+            .then((response) => {
+               const limitData = response.data.slice(0, 6);
+               setStateProduct({
+                  dataProduct: limitData,
+                  isLoading: true
+               })
+            })
+            .catch((error) => console.log(error));
+      } catch (error) {
+         console.log(error);
+      }
+   }
+
+   useEffect(() => {
+      _handlerGetDataMenu();
+      _handlerGetDataBanner();
+      _handlerGetProduct();
+
+   }, []);
 
    return (
       <div className={styles.container}>
@@ -27,64 +104,121 @@ export default function Home() {
             <div className="pt-3 pr-3 pl-3">
                <div className="w-full">
                   <InputGroup className="relative">
-                     <Input className="border-2 focus:border-gray-700 focus:shadow-none" placeholder='Search Apple, or anything you want' />
+                     <Input className="border-2 border-gray-200 focus:border-gray-200 focus:shadow-none" placeholder='Search Apple, or anything you want' />
                      <svg className="absolute right-2 top-1.5" width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M20.0893 18.9108L16.3067 15.1283C17.4292 13.7053 17.9655 11.9073 17.8059 10.102C17.6464 8.2967 16.803 6.62058 15.4485 5.41654C14.0939 4.21249 12.3305 3.57153 10.5189 3.62477C8.70735 3.67802 6.9846 4.42144 5.70308 5.70296C4.42156 6.98448 3.67814 8.70723 3.6249 10.5188C3.57165 12.3303 4.21262 14.0938 5.41666 15.4484C6.6207 16.8029 8.29682 17.6462 10.1021 17.8058C11.9074 17.9653 13.7055 17.429 15.1284 16.3066L18.9109 20.0891L20.0893 18.9108ZM10.7501 16.1666C9.67877 16.1666 8.63151 15.8489 7.74075 15.2538C6.84998 14.6586 6.15571 13.8126 5.74574 12.8228C5.33576 11.8331 5.22849 10.744 5.4375 9.69322C5.6465 8.64249 6.16239 7.67733 6.91992 6.9198C7.67746 6.16227 8.64261 5.64638 9.69334 5.43737C10.7441 5.22837 11.8332 5.33564 12.823 5.74561C13.8127 6.15559 14.6587 6.84986 15.2539 7.74062C15.8491 8.63139 16.1668 9.67865 16.1668 10.75C16.165 12.186 15.5937 13.5627 14.5783 14.5782C13.5629 15.5936 12.1861 16.1649 10.7501 16.1666V16.1666Z" fill="#54B175" />
                      </svg>
                   </InputGroup>
                </div>
                <div className="w-full pt-6">
-                  <Slider {...settings}>
-                     <div>
-                        <img className="w-full" src="/img/banner.png" />
-                     </div>
-                     <div>
-                        <img className="w-full" src="/img/banner.png" />
-                     </div>
-                     <div>
-                        <img className="w-full" src="/img/banner.png" />
-                     </div>
-                     <div>
-                        <img className="w-full" src="/img/banner.png" />
-                     </div>
-
-                  </Slider>
+                  {
+                     stateBanner.isLoading ?
+                        <Slider {...settings}>
+                           {
+                              stateBanner.dataBanner &&
+                              stateBanner.dataBanner.map(item => {
+                                 return (
+                                    <>
+                                       <Skeleton isLoaded={stateBanner.isLoading}>
+                                          <div>
+                                             <img className="w-full" src={item.urlPath} />
+                                          </div>
+                                       </Skeleton>
+                                    </>
+                                 )
+                              })
+                           }
+                        </Slider> :
+                        <div>
+                           <Skeleton className="rounded-xl" height="125px" />
+                        </div>
+                  }
                </div>
-               <div className="grid grid-cols-4 gap-4 pt-6">
-                  <div className="text-center m-auto rounded-xl p-3 w-20" style={{ backgroundColor: '#E4F3EA' }}>
-                     <div className="mb-2">
-                        <img className="m-auto" src="/img/ic-vegetable.png" />
-                     </div>
-                     <h4 className="font-bold text-xs">Sayuran</h4>
-                  </div>
-                  <div className="text-center m-auto rounded-xl p-3 w-20" style={{ backgroundColor: '#FFECE8' }}>
-                     <div className="mb-2">
-                        <img className="m-auto" src="/img/ic-fruit.png" />
-                     </div>
-                     <h4 className="font-bold text-xs">Buah</h4>
-                  </div>
-                  <div className="text-center m-auto rounded-xl p-3 w-20" style={{ backgroundColor: '#FFF6E4' }}>
-                     <div className="mb-2">
-                        <img className="m-auto" src="/img/ic-eggs.png" />
-                     </div>
-                     <h4 className="font-bold text-xs">Telur</h4>
-                  </div>
-                  <div className="text-center m-auto rounded-xl p-3 w-20" style={{ backgroundColor: '#F1EDFC' }}>
-                     <div className="mb-2">
-                        <img className="m-auto" src="/img/ic-meat.png" />
-                     </div>
-                     <h4 className="font-bold text-xs">Daging</h4>
-                  </div>
+               <div className="grid grid-cols-4 gap-3 pt-6">
+                  {
+                     state.isLoading ?
+                        <>
+                           {
+                              state.dataMenu &&
+                              state.dataMenu.map(item => {
+                                 return (
+                                    <>
+                                       <Skeleton className="rounded-xl" isLoaded={state.isLoading}>
+                                          <Link href="/">
+                                             <a>
+                                                <div className="text-center m-auto rounded-xl p-3 w-20" style={{ backgroundColor: '#FFF6E4' }}>
+                                                   <div className="mb-2">
+                                                      <img className="m-auto" src={item.urlImage} />
+                                                   </div>
+                                                   <h4 className="font-bold text-xs">{item.name}</h4>
+                                                </div>
+                                             </a>
+                                          </Link>
+                                       </Skeleton>
+                                    </>
+                                 )
+                              })
+                           }
+                        </> :
+                        <>
+                           <Skeleton className="rounded-xl" height="72px" width="80px" />
+                           <Skeleton className="rounded-xl" height="72px" width="80px" />
+                           <Skeleton className="rounded-xl" height="72px" width="80px" />
+                           <Skeleton className="rounded-xl" height="72px" width="80px" />
+                        </>
+                  }
                </div>
                <div className="pt-6">
                   <h3 className="font-bold text-md">Made For You</h3>
-                  <div className="pt-3 grid grid-cols-2 gap-2">
-                     <div className="rounded-xl bg-neutral-200">
+                  <div className="pt-6 grid grid-cols-2 gap-3">
+                     {
+                        stateProduct.isLoading ?
+                           <>
+                              {
+                                 stateProduct.dataProduct &&
+                                 stateProduct.dataProduct.map(item => {
+                                    const product = item.product;
+                                    return (
+                                       <>
+                                          <Skeleton isLoaded={stateProduct.isLoading}>
+                                             <Link href={`/detail/${item.id}`}>
+                                                <a>
+                                                   <div className="rounded-xl bg-neutral-200">
+                                                      <div className="text-center m-auto mb-3 rounded-t-xl">
+                                                         <img className="m-auto rounded-t-xl w-auto h-full object-cover" src={product.urlPath} />
+                                                      </div>
+                                                      <div className="p-3">
+                                                         <h4 className="font-semibold text-xs">{product.name}</h4>
+                                                         <span className="font-normal text-xs block mt-1">{product.weight}</span>
+                                                         <div className>
+                                                            <span className="font-semibold text-sm text-green-500 mt-3 block">
+                                                               {formatRupiah(product.price)}
+                                                            </span>
+                                                         </div>
+                                                      </div>
+                                                   </div>
+                                                </a>
+                                             </Link>
 
-                     </div>
+                                          </Skeleton>
+                                       </>
+                                    )
+                                 })
+                              }
+                           </> :
+                           <>
+                              <Skeleton height="290" className="rounded-xl" />
+                              <Skeleton height="290" className="rounded-xl" />
+                              <Skeleton height="290" className="rounded-xl" />
+                              <Skeleton height="290" className="rounded-xl" />
+                              <Skeleton height="290" className="rounded-xl" />
+                           </>
+                     }
+
                   </div>
                </div>
             </div>
+            <Navbar />
          </main>
       </div>
    )

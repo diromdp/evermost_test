@@ -7,11 +7,11 @@ class Header extends Component {
       super(props);
       this.state = {}
    }
+
    render() {
-      const { urlPage } = this.props;
       return (
-         <div className={`sticky top-0 left-0 m-auto m-0 flex z-10 pl-2 pr-2 border-b border-gray-900`}>
-            <div className="flex flex-row justify-between w-full pt-3 pl-3 pr-3 pb-3">
+         <div className={`sticky top-0 left-0 m-auto m-0 flex z-10 pl-3 pr-3 border-b border-gray-200 bg-white z-10`}>
+            <div className="flex flex-row justify-between w-full pt-3 pb-3">
                <h1 className="font-normal text-xl">Grocery</h1>
                <div className="flex">
                   <Link href="#">

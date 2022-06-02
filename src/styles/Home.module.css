@@ -2,8 +2,10 @@
   font-family: "Poppins";
   background-color: #fff;
   color: #22292f;
-  max-width: 576px;
+  max-width: 416px;
+  min-height: 100vh;
   margin: 0 auto;
+  position: relative;
 }
 
 .main {

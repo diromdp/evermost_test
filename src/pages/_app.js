@@ -5,14 +5,21 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 
 const theme = extendTheme({
-  config: colorModeConfig,
+   config: colorModeConfig,
+   styles: {
+      global: {
+         body: {
+            bg: 'blackAlpha.600',
+         },
+      },
+   },
 })
 function MyApp({ Component, pageProps }) {
-  return (
-    <ChakraProvider theme={theme}>
-      <Component {...pageProps} />
-    </ChakraProvider>
-  )
+   return (
+      <ChakraProvider theme={theme}>
+         <Component {...pageProps} />
+      </ChakraProvider>
+   )
 }
 
 export default MyApp
