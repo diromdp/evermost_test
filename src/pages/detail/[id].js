@@ -41,10 +41,10 @@ class Detail extends Component {
                urlPage="/"
             />
             <div className="relative">
-               <div className="border-b border-gray-200">
+               <div className="border-b border-gray-200 custom-img">
                   {
                      isLoading ?
-                        <Image layout='fill' className="w-full h-full" src={product.urlPath} />
+                        <Image layout={`responsive`} height="0" width="100%" className="w-full h-full relative" src={product.urlPath} />
                         :
                         <Skeleton height="480" />
                   }

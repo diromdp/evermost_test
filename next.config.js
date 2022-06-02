@@ -5,6 +5,10 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 let baseUrl = '';
 
 module.exports = withBundleAnalyzer({
+  images: {
+    domains: ['placeimg.com'],
+    formats: ['image/avif', 'image/webp'],
+  },
   poweredByHeader: false,
   trailingSlash: true,
   basePath: baseUrl,
@@ -14,8 +18,5 @@ module.exports = withBundleAnalyzer({
   future: {
     webpack5: true,
   },
-  reactStrictMode: true,
-  images: {
-    domains: ['https:/placeimg.com/640/480/animals/grayscale'],
-  },
+  reactStrictMode: true
 });
