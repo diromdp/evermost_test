@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Input, InputGroup, Skeleton } from '@chakra-ui/react'
+import { Skeleton } from '@chakra-ui/react'
 import Head from 'next/head';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -14,15 +14,15 @@ import { formatRupiah } from '../lib/helper';
 import styles from '../styles/Home.module.css';
 
 export default function Home() {
-   const [state, setState] = useState({
+   const [state, setState] = useState(typeof window === "undefined" && {
       isLoading: false,
       dataMenu: false,
    });
-   const [stateBanner, setStateBanner] = useState({
+   const [stateBanner, setStateBanner] = useState(typeof window === "undefined" && {
       dataBanner: false,
       isLoading: false
    })
-   const [stateProduct, setStateProduct] = useState({
+   const [stateProduct, setStateProduct] = useState(typeof window === "undefined" && {
       dataProduct: false,
       isLoading: false
    })
@@ -114,7 +114,7 @@ export default function Home() {
                                     <>
                                        <Skeleton isLoaded={stateBanner.isLoading}>
                                           <div>
-                                             <img className="" src={item.urlPath} />
+                                             <img className="w-full" src={item.urlPath} />
                                           </div>
                                        </Skeleton>
                                     </>
