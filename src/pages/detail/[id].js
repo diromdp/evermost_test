@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
+import axios from 'axios';
+import { connect } from 'react-redux';
 import { Button, IconButton, Input, Skeleton } from '@chakra-ui/react'
 import { FaPlus, FaMinus } from 'react-icons/fa';
-import axios from 'axios';
 import Image from 'next/image';
 
+import { getDataCart } from '../../store/cart/action';
 import Header from '../../component/headerBack';
 import { formatRupiah } from '../../lib/helper';
 import styles from '../../styles/Home.module.css';
@@ -12,7 +14,8 @@ class Detail extends Component {
    constructor(props) {
       super(props);
       this.state = {
-         isLoading: false
+         isLoading: false,
+         inputData: 0
       }
    }
 
@@ -29,9 +32,42 @@ class Detail extends Component {
       }
    }
 
+   _handlerSubmitToCart = () => {
+      const { cart, productDetail, getDataCart } = this.props;
+      const { inputData } = this.state;
+      const product = productDetail.data.product;
+      const cartData = cart.cartData;
+      const dataProduct = {
+         name: product.name,
+         price: product.price,
+         urlPath: product.urlPath,
+         weight: product.weight,
+         total: inputData
+      }
+      let arr = [];
+
+      if (cartData.length == 0) {
+         arr.push(dataProduct);
+         getDataCart(arr);
+      } else {
+         const data = cartData.map(item => {
+            if (item.name === dataProduct.name) {
+               const data = {
+                  ...item,
+                  total: item.total + inputData
+               }
+               return data
+            } else {
+               return item.push(data)
+            }
+         })
+         getDataCart(data);
+      }
+   }
+
    render() {
       const { productDetail } = this.props;
-      const { isLoading } = this.state;
+      const { isLoading, inputData } = this.state;
       const product = productDetail.data.product;
 
       return (
@@ -60,14 +96,26 @@ class Detail extends Component {
                            className="w-7 h-7 focus:shadow-none min-w-0"
                            variant='outline'
                            colorScheme='green'
+                           onClick={() => this.setState({
+                              inputData: inputData != 0 && parseInt(inputData) - 1
+                           })}
                            fontSize='12px'
                            icon={<FaMinus />}
                         />
-                        <Input className="border-0 h-7 w-7 focus:shadow-none min-w-0" placeholder="0" />
+                        <Input
+                           className="border-0 h-7 w-14 text-center focus:shadow-none min-w-0"
+                           placeholder="0"
+                           value={inputData}
+                           onChange={(val) => this.setState({
+                              inputData: val.target.value
+                           })} />
                         <IconButton
                            className="w-7 h-7 focus:shadow-none min-w-0"
                            variant='outline'
                            colorScheme='green'
+                           onClick={() => this.setState({
+                              inputData: parseInt(inputData) + 1
+                           })}
                            fontSize='12px'
                            icon={<FaPlus />}
                         />
@@ -82,7 +130,7 @@ class Detail extends Component {
                </div>
             </div>
             <div className="relative w-full p-3">
-               <Button className="w-full" colorScheme='green' variant='solid'>
+               <Button onClick={() => this._handlerSubmitToCart()} className="w-full" colorScheme='green' variant='solid'>
                   Add to Card
                </Button>
             </div>
@@ -111,4 +159,17 @@ export async function getServerSideProps(context) {
    };
 }
 
-export default Detail;
+const mapStateToProps = (state) => {
+   const { cart } = state;
+   return {
+      cart,
+   };
+};
+
+const mapDispatchToProps = (dispatch) => {
+   return {
+      getDataCart: (val) => dispatch(getDataCart(val)),
+   };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Detail);
