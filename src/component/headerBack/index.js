@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import Link from 'next/link';
-import Image from 'next/image'
 
 class HeaderBack extends Component {
    constructor(props) {
@@ -14,13 +13,16 @@ class HeaderBack extends Component {
          <div className={`sticky top-0 left-0 m-auto m-0 flex z-10 pl-3 pr-3 border-b border-gray-200 bg-white z-10`}>
             <div className="flex flex-row w-full pt-3 pb-3">
                <div className="flex">
-                  <Link href={urlPage}>
-                     <a onClick={false}>
-                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                           <path d="M15.5 19L8.5 12L15.5 5" stroke="#130F26" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                        </svg>
-                     </a>
-                  </Link>
+                  {
+                     urlPage &&
+                     <Link href={urlPage}>
+                        <a onClick={false}>
+                           <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <path d="M15.5 19L8.5 12L15.5 5" stroke="#130F26" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                           </svg>
+                        </a>
+                     </Link>
+                  }
                </div>
                {
                   titlePage &&

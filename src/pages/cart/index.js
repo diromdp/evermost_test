@@ -8,7 +8,6 @@ import { formatRupiah } from '../../lib/helper';
 import { getDataCart } from '../../store/cart/action';
 
 import Header from '../../component/headerBack';
-import Navbar from '../../component/navbar';
 
 import styles from '../../styles/Home.module.css';
 
@@ -53,7 +52,7 @@ class Cart extends Component {
                            return (
                               <>
                                  <div className="flex flex-row justify-between pb-3 pt-3 border-b border-gray-200">
-                                    <img width="90" height="70" className="rounded-xl" src={item.urlPath} />
+                                    <Image width="90" height="70" className="rounded-xl" src={item.urlPath} />
                                     <div className="flex flex-col">
                                        <h3 className="font-bold text-md mb-1">{item.name}</h3>
                                        <span className="font-normal text-sm">{item.weight}</span>

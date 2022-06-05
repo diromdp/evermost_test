@@ -119,7 +119,7 @@ const fetchData = async () => await axios.get(`https://62982b718d77ad6f750d8168.
       error: true,
       data: null,
    }),
-   );
+);
 
 const fetchDataCategory = async (id) => await axios.get(`https://62982b718d77ad6f750d8168.mockapi.io/menu/${id}`)
    .then(res => ({
@@ -130,7 +130,8 @@ const fetchDataCategory = async (id) => await axios.get(`https://62982b718d77ad6
       error: true,
       data: null,
    }),
-   );
+);
+
 export async function getServerSideProps(context) {
    const productData = await fetchData();
    const categoryData = await fetchDataCategory(context.query.id)

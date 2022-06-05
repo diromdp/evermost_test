@@ -7,8 +7,9 @@ import Image from 'next/image';
 import { withRouter } from 'next/router';
 
 import { getDataCart } from '../../store/cart/action';
-import Header from '../../component/headerBack';
 import { formatRupiah } from '../../lib/helper';
+
+import Header from '../../component/headerBack';
 import styles from '../../styles/Home.module.css';
 
 class Detail extends Component {
@@ -37,23 +38,39 @@ class Detail extends Component {
       const { cart, productDetail, getDataCart, router } = this.props;
       const { inputData } = this.state;
       const product = productDetail.data.product;
-      const cartData = cart.cartData;
       const dataProduct = {
+         id: productDetail.data.id,
          name: product.name,
          price: product.price * inputData,
          urlPath: product.urlPath,
          weight: product.weight,
-         total: inputData
+         total: inputData,
       }
       let arr = [];
-      arr.push(dataProduct);
+      let cartData = cart.cartData;
+
       if (cartData.length == 0) {
+         arr.push(dataProduct);
          getDataCart(arr);
       } else {
-         cartData.push(dataProduct)
-         getDataCart(cartData);
+         cartData.forEach((item, index) => {
+            const result = cartData.find( ({ id }) => id === dataProduct.id);
+            if(result) {
+               const data = {
+                  ...item,
+                  price: item.price + dataProduct.price,
+                  total: item.total + dataProduct.total
+               }
+               cartData[index] = data;
+               console.log(cartData);
+            } else {
+               cartData.push(dataProduct)
+               console.log(cartData);
+            }
+         });
+         getDataCart(cartData)
       }
-      router.push('/cart')
+     router.push('/cart')
    }
 
    render() {
