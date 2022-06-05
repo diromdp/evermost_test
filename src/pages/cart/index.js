@@ -14,7 +14,9 @@ import styles from '../../styles/Home.module.css';
 class Cart extends Component {
    constructor(props) {
       super(props);
-      this.state = {}
+      this.state = {
+         inputData: 0
+      }
    }
 
    UNSAFE_componentWillMount = () => {
@@ -70,29 +72,7 @@ class Cart extends Component {
                                     <div className="flex flex-col">
                                        <h3 className="font-bold text-md mb-1">{item.name}</h3>
                                        <span className="font-normal text-sm">{item.weight}</span>
-                                       <div className="flex flex-row mt-4">
-                                          <IconButton
-                                             className="w-7 h-7 focus:shadow-none min-w-0"
-                                             variant='outline'
-                                             colorScheme='green'
-                                             onClick={false}
-                                             fontSize='12px'
-                                             icon={<FaMinus />}
-                                          />
-                                          <Input
-                                             className="border-0 h-7 w-14 text-center focus:shadow-none min-w-0"
-                                             placeholder={item.total}
-                                             value={item.total}
-                                             onChange={false} />
-                                          <IconButton
-                                             className="w-7 h-7 focus:shadow-none min-w-0"
-                                             variant='outline'
-                                             colorScheme='green'
-                                             onClick={false}
-                                             fontSize='12px'
-                                             icon={<FaPlus />}
-                                          />
-                                       </div>
+                                       <span className="font-normal text-sm">{`${item.total} pcs`}</span>
                                     </div>
                                     <div className="relative flex flex-col justify-between items-end">
                                        <Link href="javascript:void(0)">
