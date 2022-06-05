@@ -37,45 +37,51 @@ class Detail extends Component {
    _handlerSubmitToCart = () => {
       const { cart, productDetail, getDataCart, router } = this.props;
       const { inputData } = this.state;
-      const product = productDetail.data.product;
-      const dataProduct = {
-         id: productDetail.data.id,
-         name: product.name,
-         price: product.price * inputData,
-         urlPath: product.urlPath,
-         weight: product.weight,
-         total: inputData,
-      }
-      let arr = [];
-      let cartData = cart.cartData;
-      let index = cartData.findIndex(function (o) {
-         return o.id === productDetail.data.id;
-      })
-      
-      if (cartData.length == 0) {
-         arr.push(dataProduct);
-         getDataCart(arr);
-      } else {
 
-         if (index == -1) {
-            cartData.push(dataProduct);
-
-         } else {
-            cartData.forEach((item, index) => {
-               if (item.id == dataProduct.id) {
-                  const data = {
-                     ...item,
-                     price: item.price + dataProduct.price,
-                     total: item.total + dataProduct.total
-                  }
-                  cartData[index] = data;
-               }
-            });
+      try {
+         const product = productDetail.data.product;
+         const dataProduct = {
+            id: productDetail.data.id,
+            name: product.name,
+            price: product.price * inputData,
+            urlPath: product.urlPath,
+            weight: product.weight,
+            total: inputData,
          }
-         getDataCart(cartData)
+         let arr = [];
+         let cartData = cart.cartData;
+         let index = cartData && cartData.findIndex(function (o) {
+            return o.id === productDetail.data.id;
+         })
+
+         if (cartData && cartData.length == 0) {
+            arr.push(dataProduct);
+            getDataCart(arr);
+         } else {
+
+            if (index == -1) {
+               cartData && cartData.push(dataProduct);
+
+            } else {
+               cartData && cartData.forEach((item, index) => {
+                  if (item.id == dataProduct.id) {
+                     const data = {
+                        ...item,
+                        price: item.price + dataProduct.price,
+                        total: item.total + dataProduct.total
+                     }
+                     cartData[index] = data;
+                  }
+               });
+            }
+            getDataCart(cartData)
+         }
+
+         router.push('/cart')
+      } catch (error) {
+         console.log(error)
       }
 
-      router.push('/cart')
    }
 
    render() {

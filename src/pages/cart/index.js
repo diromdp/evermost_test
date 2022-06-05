@@ -19,10 +19,6 @@ class Cart extends Component {
       }
    }
 
-   UNSAFE_componentWillMount = () => {
-
-   }
-
    _handlerFilteDataCart = () => {
       const { cart, getDataCart } = this.props;
       const cartData = cart.cartData;
@@ -49,9 +45,7 @@ class Cart extends Component {
    render() {
       const { cart } = this.props;
       const cartData = cart.cartData;
-      const totalPrice = cartData.reduce((acc, val) => acc + parseInt(val.price), 0);
-
-      console.log(totalPrice)
+      const totalPrice =  cartData ? cartData.reduce((acc, val) => acc + parseInt(val.price), 0) : 0;
 
       return (
          <div className={styles.container}>
@@ -69,7 +63,7 @@ class Cart extends Component {
                               <>
                                  <div className="flex flex-row justify-between pb-3 pt-3 border-b border-gray-200">
                                     <Image width="90" height="70" className="rounded-xl" src={item.urlPath} />
-                                    <div className="flex flex-col">
+                                    <div className="flex flex-col w-3/6">
                                        <h3 className="font-bold text-md mb-1">{item.name}</h3>
                                        <span className="font-normal text-sm">{item.weight}</span>
                                        <span className="font-normal text-sm">{`${item.total} pcs`}</span>
