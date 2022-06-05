@@ -18,6 +18,7 @@ class Cart extends Component {
    }
 
    UNSAFE_componentWillMount = () => {
+
    }
 
    _handlerFilteDataCart = () => {
@@ -26,15 +27,28 @@ class Cart extends Component {
       const filterArr = cartData.filter((item, index) => {
          return index !== cartData.findIndex((v) => v.name === item.name)
       })
-
       getDataCart(filterArr);
+   }
+
+   _handlerDeleteItem = (val) => {
+      const { cart, getDataCart } = this.props;
+      let cartData = cart.cartData;
+      let index = cartData.findIndex(function (o) {
+         return o.id === val ;
+      })
+      console.log(index)
+
+      if (index !== -1) {
+         cartData.splice(index, 1);
+         getDataCart(cartData)
+      }
    }
 
    render() {
       const { cart } = this.props;
       const cartData = cart.cartData;
       const totalPrice = cartData.reduce((acc, val) => acc + parseInt(val.price), 0);
-      
+
       console.log(totalPrice)
 
       return (
@@ -82,7 +96,7 @@ class Cart extends Component {
                                     </div>
                                     <div className="relative flex flex-col justify-between items-end">
                                        <Link href="javascript:void(0)">
-                                          <a onClick={false}>
+                                          <a onClick={() => this._handlerDeleteItem(item.id)}>
                                              <FaTrash />
                                           </a>
                                        </Link>

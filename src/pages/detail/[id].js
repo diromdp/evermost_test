@@ -48,29 +48,34 @@ class Detail extends Component {
       }
       let arr = [];
       let cartData = cart.cartData;
-
+      let index = cartData.findIndex(function (o) {
+         return o.id === productDetail.data.id;
+      })
+      
       if (cartData.length == 0) {
          arr.push(dataProduct);
          getDataCart(arr);
       } else {
-         cartData.forEach((item, index) => {
-            const result = cartData.find( ({ id }) => id === dataProduct.id);
-            if(result) {
-               const data = {
-                  ...item,
-                  price: item.price + dataProduct.price,
-                  total: item.total + dataProduct.total
+
+         if (index == -1) {
+            cartData.push(dataProduct);
+
+         } else {
+            cartData.forEach((item, index) => {
+               if (item.id == dataProduct.id) {
+                  const data = {
+                     ...item,
+                     price: item.price + dataProduct.price,
+                     total: item.total + dataProduct.total
+                  }
+                  cartData[index] = data;
                }
-               cartData[index] = data;
-               console.log(cartData);
-            } else {
-               cartData.push(dataProduct)
-               console.log(cartData);
-            }
-         });
+            });
+         }
          getDataCart(cartData)
       }
-     router.push('/cart')
+
+      router.push('/cart')
    }
 
    render() {
