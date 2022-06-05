@@ -25,7 +25,7 @@ function MyApp({ Component, pageProps }) {
    
    return process.browser ? (
       <>
-         <PersistGate persistor={store.__persistor} loading={<div>Loading</div>}>
+         <PersistGate persistor={store.__persistor}>
             <ChakraProvider theme={theme}>
                <Component {...pageProps} />
             </ChakraProvider>

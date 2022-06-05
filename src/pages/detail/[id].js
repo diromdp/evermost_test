@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { Button, IconButton, Input, Skeleton } from '@chakra-ui/react'
 import { FaPlus, FaMinus } from 'react-icons/fa';
 import Image from 'next/image';
+import { withRouter } from 'next/router';
 
 import { getDataCart } from '../../store/cart/action';
 import Header from '../../component/headerBack';
@@ -33,36 +34,26 @@ class Detail extends Component {
    }
 
    _handlerSubmitToCart = () => {
-      const { cart, productDetail, getDataCart } = this.props;
+      const { cart, productDetail, getDataCart, router } = this.props;
       const { inputData } = this.state;
       const product = productDetail.data.product;
       const cartData = cart.cartData;
       const dataProduct = {
          name: product.name,
-         price: product.price,
+         price: product.price * inputData,
          urlPath: product.urlPath,
          weight: product.weight,
          total: inputData
       }
       let arr = [];
-
+      arr.push(dataProduct);
       if (cartData.length == 0) {
-         arr.push(dataProduct);
          getDataCart(arr);
       } else {
-         const data = cartData.map(item => {
-            if (item.name === dataProduct.name) {
-               const data = {
-                  ...item,
-                  total: item.total + inputData
-               }
-               return data
-            } else {
-               return item.push(data)
-            }
-         })
-         getDataCart(data);
+         cartData.push(dataProduct)
+         getDataCart(cartData);
       }
+      router.push('/cart')
    }
 
    render() {
@@ -172,4 +163,4 @@ const mapDispatchToProps = (dispatch) => {
    };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Detail);
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Detail));

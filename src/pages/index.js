@@ -178,7 +178,7 @@ export default function Home() {
                                                 <a>
                                                    <div className="rounded-xl bg-neutral-200">
                                                       <div className="text-center m-auto mb-3 rounded-t-xl">
-                                                         <Image height="0" width="0" layout={`responsive`} className="m-auto rounded-t-xl w-auto h-full object-cover" src={product.urlPath} />
+                                                         <Image height="0" width="0" layout={`responsive`}  className="m-auto rounded-t-xl w-auto h-full object-cover" src={product.urlPath} />
                                                       </div>
                                                       <div className="p-3">
                                                          <h4 className="font-semibold text-xs">{product.name}</h4>
